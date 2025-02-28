@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+ 
 def main():
     data = pd.read_csv("C:/documents_local/`projet_math/data_csv/mnist_train.csv")
     data_testing_complete = pd.read_csv("C:/documents_local/`projet_math/data_csv/mnist_test.csv")
