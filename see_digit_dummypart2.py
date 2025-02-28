@@ -23,6 +23,19 @@ def main():
     epochs = 80
     learning_rate = 0.01
 
+    no_batch = int(data.shape[0]/mini_batch)+1
+    batch = np.zeros((784,mini_batch. no_batch)) #la monsieur a dit que c'est une matrice 3d, chaque étage est une batch dans lesquels chaque colonne est une image
+
+    i = 0 # numéro de la colonne (a quelle image de la batch on est rendu)
+    ib = 0 # numéro de l'étage (a quelle batch on est rendu)
+    for img, l in zip(image_train, label_train):
+      batch[:,i, ib] = img
+      i += 1
+      if i==100:  # ca change d'étage quand le premier etage est plein (une fois que la mini batch a 100 images) et ca reset i a 0
+       ib += 1 
+       i = 0
+      
+ 
     for i in range(epochs):
         nb_correct = 0
         count = 1
@@ -32,7 +45,7 @@ def main():
         w2average = np.zeros((10,15))
         b2average = np.zeros((10,1))
 
-        for img, l in zip(image_train, label_train):
+        for img, l in zip(image_train, label_train): # à modifier for i in range(no_batch): batch i : batch[:, :, i]
 
             answer = one_hot(l).T
             ima = img.reshape(784,1)
