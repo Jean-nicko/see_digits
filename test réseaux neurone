@@ -1,0 +1,68 @@
+from http.client import CannotSendRequest
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("C:/mnist_test.csv")
+dw1=pd.read_csv('C:/data/dataw1.csv')
+db1=pd.read_csv('C:/data/leb1data.csv')
+dw2=pd.read_csv(r'C:/data/dataw2.csv')
+db2=pd.read_csv(r'C:/data/B2data.csv')
+
+b1 = np.array(db1)
+b2 = np.array(db2)
+w1 = np.array(dw1)
+w2 = np.array(dw2)
+
+
+datas = np.array(data)
+
+label_train = datas[:, 0]
+image_train = np.delete(datas, 0, 1)/255
+resultat= np.zeros([10, 10])
+
+n=10000
+def relu(x):
+    return np.tanh(x/5)
+
+
+
+for i in range (n):
+    l=np.random.randint(10000)
+    img = image_train[l]
+    ima = img.reshape(784,1)
+    answer=label_train[l]
+
+
+    z1 = np.dot(w1,ima) + b1
+    a1 = relu(z1)
+    z2 = np.dot(w2, a1) + b2
+    a2 = z2
+
+    resultat[answer, np.argmax(a2)] += 1
+    if np.argmax(a2) != answer:
+        print(np.argmax(a2),';', answer,';',l)
+        #fig1, ax1 = plt.subplots()
+        #im = ax1.imshow(ima.reshape(28,28), cmap="gray")
+
+
+
+fig, ax = plt.subplots()
+im = ax.imshow(resultat, cmap="magma")
+ax.set_xticks(range(len(resultat)))
+ax.set_yticks(range(len(resultat)))
+
+for i in range(len(resultat)):
+    for j in range(len(resultat)):
+        text = ax.text(j, i, resultat[i, j],
+                       ha="center", va="center", color="white")
+for i in range(len(resultat)):
+        text= ax.text(i,i,resultat[i,i], ha="center", va="center", color="black")
+ax.set_title("Résultats")
+ax.set_xlabel('Prédiction du réseau de neurone')
+ax.set_ylabel('Résultats attendus')
+
+fig.tight_layout()
+#fig1.tight_layout()
+plt.show()
